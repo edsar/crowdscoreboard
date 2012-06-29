@@ -1,0 +1,21 @@
+<h1>Listing calculated_game_statistics</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @calculated_game_statistics.each do |calculated_game_statistic| %>
+  <tr>
+    <td><%= link_to 'Show', calculated_game_statistic %></td>
+    <td><%= link_to 'Edit', edit_calculated_game_statistic_path(calculated_game_statistic) %></td>
+    <td><%= link_to 'Destroy', calculated_game_statistic, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Calculated game statistic', new_calculated_game_statistic_path %>

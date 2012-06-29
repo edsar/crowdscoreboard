@@ -38,3 +38,9 @@ gem 'jquery-rails'
 
 # To use debugger
 # gem 'debugger'
+
+#http://www.rubyinside.com/how-to-rails-3-and-rspec-2-4336.html
+group :development, :test do
+  gem 'rspec-rails'
+  gem 'populator'
+end

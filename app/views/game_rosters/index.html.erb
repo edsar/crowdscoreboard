@@ -1,0 +1,21 @@
+<h1>Listing game_rosters</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @game_rosters.each do |game_roster| %>
+  <tr>
+    <td><%= link_to 'Show', game_roster %></td>
+    <td><%= link_to 'Edit', edit_game_roster_path(game_roster) %></td>
+    <td><%= link_to 'Destroy', game_roster, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Game roster', new_game_roster_path %>

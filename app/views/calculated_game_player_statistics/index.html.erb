@@ -1,0 +1,31 @@
+<h1>Listing calculated_game_player_statistics</h1>
+
+<table>
+  <tr>
+    <th>Game</th>
+    <th>Team</th>
+    <th>Player</th>
+    <th>Count</th>
+    <th>Stat type</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @calculated_game_player_statistics.each do |calculated_game_player_statistic| %>
+  <tr>
+    <td><%= calculated_game_player_statistic.game_id %></td>
+    <td><%= calculated_game_player_statistic.team_id %></td>
+    <td><%= calculated_game_player_statistic.player_id %></td>
+    <td><%= calculated_game_player_statistic.count %></td>
+    <td><%= calculated_game_player_statistic.stat_type %></td>
+    <td><%= link_to 'Show', calculated_game_player_statistic %></td>
+    <td><%= link_to 'Edit', edit_calculated_game_player_statistic_path(calculated_game_player_statistic) %></td>
+    <td><%= link_to 'Destroy', calculated_game_player_statistic, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Calculated game player statistic', new_calculated_game_player_statistic_path %>

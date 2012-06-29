@@ -1,4 +1,24 @@
 Crowdscoreboard::Application.routes.draw do
+  resources :players
+
+  resources :statistic_types
+
+  resources :calculated_game_player_statistics
+
+  resources :calculated_game_statistics
+
+  resources :calculated_player_statistics
+
+  resources :game_rosters
+
+  resources :teams
+
+  resources :games
+
+  resources :events
+
+  resources :users
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

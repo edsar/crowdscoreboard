@@ -1,0 +1,37 @@
+<%= form_for(@calculated_game_player_statistic) do |f| %>
+  <% if @calculated_game_player_statistic.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@calculated_game_player_statistic.errors.count, "error") %> prohibited this calculated_game_player_statistic from being saved:</h2>
+
+      <ul>
+      <% @calculated_game_player_statistic.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :game_id %><br />
+    <%= f.text_field :game_id %>
+  </div>
+  <div class="field">
+    <%= f.label :team_id %><br />
+    <%= f.text_field :team_id %>
+  </div>
+  <div class="field">
+    <%= f.label :player_id %><br />
+    <%= f.text_field :player_id %>
+  </div>
+  <div class="field">
+    <%= f.label :count %><br />
+    <%= f.text_field :count %>
+  </div>
+  <div class="field">
+    <%= f.label :stat_type %><br />
+    <%= f.text_field :stat_type %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

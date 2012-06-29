@@ -1,0 +1,30 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Game:</b>
+  <%= @calculated_game_player_statistic.game_id %>
+</p>
+
+<p>
+  <b>Team:</b>
+  <%= @calculated_game_player_statistic.team_id %>
+</p>
+
+<p>
+  <b>Player:</b>
+  <%= @calculated_game_player_statistic.player_id %>
+</p>
+
+<p>
+  <b>Count:</b>
+  <%= @calculated_game_player_statistic.count %>
+</p>
+
+<p>
+  <b>Stat type:</b>
+  <%= @calculated_game_player_statistic.stat_type %>
+</p>
+
+
+<%= link_to 'Edit', edit_calculated_game_player_statistic_path(@calculated_game_player_statistic) %> |
+<%= link_to 'Back', calculated_game_player_statistics_path %>

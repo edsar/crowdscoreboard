@@ -1,0 +1,17 @@
+<%= form_for(@calculated_player_statistic) do |f| %>
+  <% if @calculated_player_statistic.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@calculated_player_statistic.errors.count, "error") %> prohibited this calculated_player_statistic from being saved:</h2>
+
+      <ul>
+      <% @calculated_player_statistic.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

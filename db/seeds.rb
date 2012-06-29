@@ -5,3 +5,9 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+
+
+ StatisticType.delete_all   
+ StatisticType.create!( :code => "FGM", :points => 2)
+ StatisticType.create!( :code => "3PM", :points => 3)
+ 

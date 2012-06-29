@@ -1,0 +1,15 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Code:</b>
+  <%= @statistic_type.code %>
+</p>
+
+<p>
+  <b>Points:</b>
+  <%= @statistic_type.points %>
+</p>
+
+
+<%= link_to 'Edit', edit_statistic_type_path(@statistic_type) %> |
+<%= link_to 'Back', statistic_types_path %>
