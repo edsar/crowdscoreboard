@@ -7,7 +7,7 @@ describe "calculated_game_player_statistics/show" do
       :team_id => "",
       :player_id => "",
       :count => "",
-      :stat_type => nil
+      :statistic_type => nil
     ))
   end
 

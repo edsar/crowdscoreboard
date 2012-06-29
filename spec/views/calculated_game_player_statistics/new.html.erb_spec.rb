@@ -7,7 +7,7 @@ describe "calculated_game_player_statistics/new" do
       :team_id => "",
       :player_id => "",
       :count => "",
-      :stat_type => nil
+      :statistic_type => nil
     ).as_new_record)
   end
 
@@ -20,7 +20,7 @@ describe "calculated_game_player_statistics/new" do
       assert_select "input#calculated_game_player_statistic_team_id", :name => "calculated_game_player_statistic[team_id]"
       assert_select "input#calculated_game_player_statistic_player_id", :name => "calculated_game_player_statistic[player_id]"
       assert_select "input#calculated_game_player_statistic_count", :name => "calculated_game_player_statistic[count]"
-      assert_select "input#calculated_game_player_statistic_stat_type", :name => "calculated_game_player_statistic[stat_type]"
+      assert_select "input#calculated_game_player_statistic_statistic_type", :name => "calculated_game_player_statistic[statistic_type]"
     end
   end
 end

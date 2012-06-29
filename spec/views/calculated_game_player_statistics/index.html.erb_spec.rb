@@ -8,14 +8,14 @@ describe "calculated_game_player_statistics/index" do
         :team_id => "",
         :player_id => "",
         :count => "",
-        :stat_type => nil
+        :statistic_type => nil
       ),
       stub_model(CalculatedGamePlayerStatistic,
         :game_id => "",
         :team_id => "",
         :player_id => "",
         :count => "",
-        :stat_type => nil
+        :statistic_type => nil
       )
     ])
   end

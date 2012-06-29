@@ -5,10 +5,9 @@ class CreateCalculatedGamePlayerStatistics < ActiveRecord::Migration
       t.integer :team_id
       t.integer :player_id
       t.integer :count
-      t.references :stat_type
+      t.references :statistic_type
 
       t.timestamps
     end
-    add_index :calculated_game_player_statistics, :stat_type_id
   end
 end

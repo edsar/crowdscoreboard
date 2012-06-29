@@ -1,4 +1,4 @@
 class CalculatedGamePlayerStatistic < ActiveRecord::Base
-  belongs_to :stat_type
-  attr_accessible :count, :game_id, :player_id, :team_id
+  belongs_to :statistic_type
+  attr_accessible :count, :game_id, :player_id, :team_id, :statistic_type
 end

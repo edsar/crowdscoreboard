@@ -76,7 +76,7 @@ GEM
     multipart-post (1.1.5)
     pg (0.14.0)
     polyglot (0.3.3)
-    populator (1.0.0)
+    populator3 (0.2.7)
     rack (1.4.1)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -152,7 +152,7 @@ DEPENDENCIES
   coffee-rails (~> 3.2.1)
   jquery-rails
   pg
-  populator
+  populator3
   rails (= 3.2.6)
   rspec-rails
   sass-rails (~> 3.2.3)

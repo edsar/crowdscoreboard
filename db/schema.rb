@@ -18,20 +18,18 @@ ActiveRecord::Schema.define(:version => 20120629183549) do
     t.integer  "team_id"
     t.integer  "player_id"
     t.integer  "count"
-    t.integer  "stat_type_id"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.integer  "statistic_type_id"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
   end
-
-  add_index "calculated_game_player_statistics", ["stat_type_id"], :name => "index_calculated_game_player_statistics_on_stat_type_id"
 
   create_table "calculated_game_statistics", :force => true do |t|
     t.integer  "game_id"
     t.integer  "team_id"
     t.integer  "count"
-    t.integer  "stat_type_id"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.integer  "statistic_type_id"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
   end
 
   create_table "game_rosters", :force => true do |t|
