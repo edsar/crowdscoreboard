@@ -18,7 +18,7 @@
     <td><%= calculated_game_player_statistic.team_id %></td>
     <td><%= calculated_game_player_statistic.player_id %></td>
     <td><%= calculated_game_player_statistic.count %></td>
-    <td><%= calculated_game_player_statistic.statistic_type %></td>
+    <td><%= calculated_game_player_statistic.statistic_type.code %></td>
     <td><%= link_to 'Show', calculated_game_player_statistic %></td>
     <td><%= link_to 'Edit', edit_calculated_game_player_statistic_path(calculated_game_player_statistic) %></td>
     <td><%= link_to 'Destroy', calculated_game_player_statistic, method: :delete, data: { confirm: 'Are you sure?' } %></td>
