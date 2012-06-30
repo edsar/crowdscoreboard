@@ -1,6 +1,5 @@
 namespace :db do
   desc "create Game roster"
-  require 'populator'
   
   task :populate => :environment do
     
@@ -17,6 +16,11 @@ namespace :db do
     CalculatedGamePlayerStatistic.destroy_all
     CalculatedGameStatistic.destroy_all
     
+    StatisticType.delete_all   
+    StatisticType.create!( :code => "FGM", :points => 2)
+    StatisticType.create!( :code => "3PM", :points => 3)
+    
+    
     @game = Game.create!(:name=>'Seattle Storm vs. LA Sparks')
     @storm = Team.create!(:name =>"Seattle Storm")
     @sparks = Team.create!(:name => "LA Sparks")
@@ -27,26 +31,22 @@ namespace :db do
     
     
     index=0
-    Player.populate storm_player_names.count do |player|
-        player.name = storm_player_names[index]
-        index=index+1
+    storm_player_names.each do |name|
+      player = Player.create!(:name=>name)
+      @statistic_types.each do |stat|
+         CalculatedGamePlayerStatistic.create!(:player=>player, :game=>@game, :team=>@storm,
+               :count=>1+rand(20), :statistic_type=>stat)
+          end
+      end
+      sparks_player_names.each do |name|
+        player = Player.create!(:name=>name)
         @statistic_types.each do |stat|
-        CalculatedGamePlayerStatistic.create!(:player_id=>player.id, :game_id=>@game.id, :team_id=>@storm.id,
-             :count=>1+rand(20), :statistic_type=>stat)
+           CalculatedGamePlayerStatistic.create!(:player=>player, :game=>@game, :team=>@sparks,
+                 :count=>1+rand(20), :statistic_type=>stat)
+            end
         end
-    end
-    
-    Player.populate sparks_player_names.count do |player|
-        player.name = sparks_player_names[index]
-        index=index+1
-        @statistic_types.each do |stat|
-        CalculatedGamePlayerStatistic.create!(:player_id=>player.id, :game_id=>@game.id, :team_id=>@sparks.id,
-             :count=>1+rand(20), :statistic_type=>stat)
-        end
-    end
-    
-    
-    
+        
+   
         # 
         # Summary team stats for storm
     @storm_stats = CalculatedGamePlayerStatistic.where("team_id=? and game_id=?",@storm.id, @game.id)
@@ -61,7 +61,7 @@ namespace :db do
    # puts "#{stormHash}"
    
     stormHash.each do|key, value|
-      CalculatedGameStatistic.create!( :game_id=>@game.id, :team_id=>@storm.id,
+      CalculatedGameStatistic.create!( :game=>@game, :team=>@storm,
            :count=>value, :statistic_type=>key)
     end
     
@@ -77,7 +77,7 @@ namespace :db do
      # puts "#{stormHash}"
 
       sparksHash.each do|key, value|
-        CalculatedGameStatistic.create!( :game_id=>@game.id, :team_id=>@sparks.id,
+        CalculatedGameStatistic.create!( :game=>@game, :team=>@sparks,
              :count=>value, :statistic_type=>key)
       end
     

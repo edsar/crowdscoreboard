@@ -3,7 +3,18 @@
 <p>
   <b>Name:</b>
   <%= @game.name %>
+  
+  <ul>
+  <% @game.team_ids.each do |id| %>
+    <li><%= id%><ul>
+        <% @game.player_ids(id).each do |pid| %>
+        <li><%= pid%>
+        <% end%>
+        </ul>
+  <% end %>
+  </ul>
 </p>
+
 
 
 <%= link_to 'Edit', edit_game_path(@game) %> |
