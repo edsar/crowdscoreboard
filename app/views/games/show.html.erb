@@ -1,21 +1,24 @@
+<% present @game do |game_presenter | %>
 <p id="notice"><%= notice %></p>
 
 <p>
   <b>Name:</b>
-  <%= @game.name %>
-  
-  <ul>
-  <% @game.team_ids.each do |id| %>
-    <li><%= id%><ul>
-        <% @game.player_ids(id).each do |pid| %>
-        <li><%= pid%>
-        <% end%>
+  <%= game_presenter.name %><br>
+    
+    <% game_presenter.teams.each do |t| %>
+    <h3><%= t.name%> - <%= game_presenter.team_total(t)%><small> (<%= game_presenter.team_stats_display(t)%>)</small> </h3>
+        <ul>
+        <% game_presenter.players(t).each do |p| %>
+            <li> <%=p.name%> = <%= game_presenter.player_total(p) %>
+                <small> (<%= game_presenter.player_stats_display(p)%>)</small>
+        <% end %>
         </ul>
-  <% end %>
-  </ul>
-</p>
+    <% end %>
+    
+   </p>
 
 
 
 <%= link_to 'Edit', edit_game_path(@game) %> |
 <%= link_to 'Back', games_path %>
+<% end %>
