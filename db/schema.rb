@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120629183549) do
+ActiveRecord::Schema.define(:version => 20120704230914) do
 
   create_table "calculated_game_player_statistics", :force => true do |t|
     t.integer  "count"
@@ -64,6 +64,22 @@ ActiveRecord::Schema.define(:version => 20120629183549) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
+
+  create_table "user_reported_statistics", :force => true do |t|
+    t.integer  "statistic_type_id"
+    t.integer  "game_id"
+    t.integer  "team_id"
+    t.integer  "player_id"
+    t.integer  "user_id"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+  end
+
+  add_index "user_reported_statistics", ["game_id"], :name => "index_user_reported_statistics_on_game_id"
+  add_index "user_reported_statistics", ["player_id"], :name => "index_user_reported_statistics_on_player_id"
+  add_index "user_reported_statistics", ["statistic_type_id"], :name => "index_user_reported_statistics_on_statistic_type_id"
+  add_index "user_reported_statistics", ["team_id"], :name => "index_user_reported_statistics_on_team_id"
+  add_index "user_reported_statistics", ["user_id"], :name => "index_user_reported_statistics_on_user_id"
 
   create_table "users", :force => true do |t|
     t.string   "twitter_id"

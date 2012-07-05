@@ -1,0 +1,31 @@
+<h1>Listing user_reported_statistics</h1>
+
+<table>
+  <tr>
+    <th>Statistic type</th>
+    <th>Game</th>
+    <th>Team</th>
+    <th>Player</th>
+    <th>User</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @user_reported_statistics.each do |user_reported_statistic| %>
+  <tr>
+    <td><%= user_reported_statistic.statistic_type.id %></td>
+    <td><%= user_reported_statistic.game.id %></td>
+    <td><%= user_reported_statistic.team.id %></td>
+    <td><%= user_reported_statistic.player.id %></td>
+    <td><%= user_reported_statistic.user.id %></td>
+    <td><%= link_to 'Show', user_reported_statistic %></td>
+    <td><%= link_to 'Edit', edit_user_reported_statistic_path(user_reported_statistic) %></td>
+    <td><%= link_to 'Destroy', user_reported_statistic, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New User reported statistic', new_user_reported_statistic_path %>

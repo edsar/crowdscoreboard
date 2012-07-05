@@ -1,4 +1,6 @@
 Crowdscoreboard::Application.routes.draw do
+  resources :user_reported_statistics
+
   resources :players
 
   resources :statistic_types

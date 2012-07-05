@@ -1,0 +1,30 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Statistic type:</b>
+  <%= @user_reported_statistic.statistic_type.code %>
+</p>
+
+<p>
+  <b>Game:</b>
+  <%= @user_reported_statistic.game.id %>
+</p>
+
+<p>
+  <b>Team:</b>
+  <%= @user_reported_statistic.team.id %>
+</p>
+
+<p>
+  <b>Player:</b>
+  <%= @user_reported_statistic.player.id %>
+</p>
+
+<p>
+  <b>User:</b>
+  <%= @user_reported_statistic.user.id %>
+</p>
+
+
+<%= link_to 'Edit', edit_user_reported_statistic_path(@user_reported_statistic) %> |
+<%= link_to 'Back', user_reported_statistics_path %>

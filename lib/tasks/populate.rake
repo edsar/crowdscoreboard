@@ -13,6 +13,7 @@ namespace :db do
     Game.destroy_all
     Team.destroy_all
     Player.destroy_all
+    User.destroy_all
     CalculatedGamePlayerStatistic.destroy_all
     CalculatedGameStatistic.destroy_all
     
@@ -20,6 +21,11 @@ namespace :db do
     StatisticType.create!( :code => "FGM", :points => 2)
     StatisticType.create!( :code => "3PM", :points => 3)
     
+    User.create!(:twitter_screen_name=>'SparksFan')
+    User.create!(:twitter_screen_name=>'StormFan')
+    User.create!(:twitter_screen_name=>'SportsFan')
+    User.create!(:twitter_screen_name=>'SueBirdFan')
+   
     
     @game = Game.create!(:name=>'Seattle Storm vs. LA Sparks')
     @storm = Team.create!(:name =>"Seattle Storm")
