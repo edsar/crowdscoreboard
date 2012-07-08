@@ -46,7 +46,6 @@ class UserReportedStatisticsController < ApplicationController
   # POST /user_reported_statistics.json
   def create
     @user_reported_statistic = UserReportedStatistic.new()
-  
      stat_params=params[:user_reported_statistic]
      @user_reported_statistic.statistic_type=StatisticType.find(stat_params[:statistic_type])
      @user_reported_statistic.game=Game.find(stat_params[:game])
