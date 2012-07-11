@@ -14,6 +14,7 @@ class GamesController < ApplicationController
   # GET /games/1.json
   def show
     @game = Game.find(params[:id])
+    StatisticsCollector.calculate_stats(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb

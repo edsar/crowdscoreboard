@@ -72,9 +72,11 @@ class GamePresenter < BasePresenter
      parse unless @ready
       stats = @teamStats[team]
       message = ""
-      stats.each_with_index do |s,index|
-        message << ", " unless index==0
-        message << "#{s.count} #{s.statistic_type.code}"
+      if(stats)
+        stats.each_with_index do |s,index|
+          message << ", " unless index==0
+          message << "#{s.count} #{s.statistic_type.code}"
+        end
       end
       return message
     end
@@ -83,8 +85,10 @@ class GamePresenter < BasePresenter
        parse unless @ready
         stats = @teamStats[team]
         total=0
-        stats.each do |s|
-          total=total+(s.count*s.statistic_type.points)
+        if (stats)
+          stats.each do |s|
+            total=total+(s.count*s.statistic_type.points)
+          end
         end
         return total
     end
