@@ -1,9 +1,14 @@
 class UserReportedStatisticsController < ApplicationController
+  
+  require "statistics_collector"
+  require "user_reported_statistic_slim"
+  
+  
   # GET /user_reported_statistics
   # GET /user_reported_statistics.json
   def index
-    @user_reported_statistics = UserReportedStatistic.all
-
+    #@user_reported_statistics = UserReportedStatistic.all
+     @stats_log_entries = Rails.cache.fetch("user_stats_log"){Array.new}
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @user_reported_statistics }
@@ -25,7 +30,7 @@ class UserReportedStatisticsController < ApplicationController
   # GET /user_reported_statistics/new.json
   def new
     @user_reported_statistic = UserReportedStatistic.new
-    @statistic_types = StatisticType.all_cached
+    @statistic_types = StatisticType.all
     @games = Game.all
     @teams = Team.all
     @players = Player.all
@@ -52,14 +57,22 @@ class UserReportedStatisticsController < ApplicationController
      @user_reported_statistic.team=Team.find(stat_params[:team])
      @user_reported_statistic.player=Player.find(stat_params[:player])
      @user_reported_statistic.user=User.find(stat_params[:user])
+     logger.info("logger create #{@user_reported_statistic}")
+     StatisticsCollector.update_stat(stat_params[:user],stat_params[:game],stat_params[:team],stat_params[:player],stat_params[:statistic_type])
+     logger.info("logger update_stat")
+     log = Rails.cache.fetch("user_stats_log"){Array.new}
+     log.push(UserReportedStatisticSlim.new(@user_reported_statistic))
+     Rails.cache.write("user_stats_log",log)
+     
     respond_to do |format|
       if @user_reported_statistic.save
-        format.html { redirect_to user_reported_statistics_url, notice: 'User reported statistic was successfully created.' }
-        format.json { render json: @user_reported_statistic, status: :created, location: @user_reported_statistic }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @user_reported_statistic.errors, status: :unprocessable_entity }
-      end
+                  format.html { redirect_to user_reported_statistics_url, notice: 'User reported statistic was successfully created.' }
+                  format.json { render json: @user_reported_statistic, status: :created, location: @user_reported_statistic }
+                else
+                  format.html { render action: "new" }
+                  format.json { render json: @user_reported_statistic.errors, status: :unprocessable_entity }
+                end
+     
     end
   end
 

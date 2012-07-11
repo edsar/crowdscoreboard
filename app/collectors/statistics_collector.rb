@@ -2,12 +2,31 @@ class StatisticsCollector
   
   require 'cumulative_user_player_statistic'
   
-  def self.add_stat(userstat)
-    self.update_game(userstat.game.id)
+  def self.add_stat(user_id,game_id,team_id,player_id,stat_id)
+    update_game(game_id)
+    update_stat(user_id,game_id,team_id,player_id,stat_id)
+    add_game_log(game_id,create_log(user_id,game_id,team_id,player_id,stat_id))
+  end
+
+  def self.add_game_log(game_id,text)
+    gk = game_log_key(game_id)
+    game_log = Rails.cache.fetch(gk){Array.new}
+    game_log.push(text)
+    Rails.cache.write(gk,game_log)
+  end
+  
+  def self.game_log(game_id)
+    gk = game_log_key(game_id)
+    Rails.cache.read(gk)
+  end
+  
+  def self.create_log(user_id,game_id,team_id,player_id,stat_id)
+    str = "#" << user_id.to_s << "." << game_id.to_s << "." << team_id.to_s << "." <<  player_id.to_s << "." <<  stat_id.to_s
   end
   
   def self.update_stat(user_id,game_id,team_id,player_id,stat_id)
-    gk = game_key(game_id)
+    Logger.new(STDOUT).info("logger update_stat  #{stat_id}.")
+    gk = game_stats_map_key(game_id)
     rk = record_key(user_id,game_id,team_id,player_id,stat_id)
     
     # cache contains a map for each game
@@ -32,12 +51,12 @@ class StatisticsCollector
   end
   
   def self.get_map(game_id)
-     gk = game_key(game_id)
+     gk = game_stats_map_key(game_id)
      game_map = Rails.cache.fetch(gk){Hash.new}
   end
   
   def self.calculate_stats(game_id)
-      gk = game_key(game_id)
+      gk = game_stats_map_key(game_id)
       game_map = Rails.cache.read(gk)
       return unless game_map
       
@@ -104,7 +123,9 @@ class StatisticsCollector
      return a[where] 
   end
      
-  def self.game_key(game_id) return "game_stats_map." << game_id.to_s end
+  def self.game_log_key(game_id) return "game_log." << game_id.to_s end
+  
+  def self.game_stats_map_key(game_id) return "game_stats_map." << game_id.to_s end
    
   def self.record_key(user_id,game_id,team_id,player_id,stat_id) game_id.to_s << "." <<
    team_id.to_s << "." << player_id.to_s << "." << stat_id.to_s 

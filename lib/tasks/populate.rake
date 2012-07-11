@@ -14,6 +14,7 @@ namespace :db do
     Team.destroy_all
     Player.destroy_all
     User.destroy_all
+    UserReportedStatistic.destroy_all
     CalculatedGamePlayerStatistic.destroy_all
     CalculatedGameStatistic.destroy_all
     

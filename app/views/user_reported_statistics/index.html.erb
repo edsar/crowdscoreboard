@@ -12,18 +12,17 @@
     <th></th>
   </tr>
 
-<% @user_reported_statistics.each do |user_reported_statistic| %>
+<% @stats_log_entries.each do |user_reported_statistic| %>
   <tr>
-    <td><%= user_reported_statistic.statistic_type.id %></td>
-    <td><%= user_reported_statistic.game.id %></td>
-    <td><%= user_reported_statistic.team.id %></td>
-    <td><%= user_reported_statistic.player.id %></td>
-    <td><%= user_reported_statistic.user.id %></td>
-    <td><%= link_to 'Show', user_reported_statistic %></td>
-    <td><%= link_to 'Edit', edit_user_reported_statistic_path(user_reported_statistic) %></td>
-    <td><%= link_to 'Destroy', user_reported_statistic, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    <td><%= user_reported_statistic.statistic_type_id %></td>
+    <td><%= user_reported_statistic.game_id %></td>
+    <td><%= user_reported_statistic.team_id %></td>
+    <td><%= user_reported_statistic.player_id %></td>
+    <td><%= user_reported_statistic.user_id %></td>
+   
   </tr>
 <% end %>
+
 </table>
 
 <br />
