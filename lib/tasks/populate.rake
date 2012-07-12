@@ -10,6 +10,7 @@ namespace :db do
             "Coco Miller","DeLisha Milton-Jones","Jenna O'Hea","Jantel Lavender"]
              
 
+    Rails.cache.clear
     Game.destroy_all
     Team.destroy_all
     Player.destroy_all

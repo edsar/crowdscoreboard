@@ -1,29 +1,43 @@
 class StatisticsCollector
   
   require 'cumulative_user_player_statistic'
+  require 'user_reported_statistic_slim'
+  
+  ## cache entries
+  
+  def self.add_stat(stat)
+    update_game(stat.game_id)
+    update_stat(stat.user_id,stat.game_id,stat.team_id,stat.player_id,stat.statistic_type_id)
+    add_game_log(game_id,stat)
+  end
   
   def self.add_stat(user_id,game_id,team_id,player_id,stat_id)
     update_game(game_id)
     update_stat(user_id,game_id,team_id,player_id,stat_id)
-    add_game_log(game_id,create_log(user_id,game_id,team_id,player_id,stat_id))
+    stat = UserReportedStatisticSlim.new(nil)
+    stat.set_attrs(user_id,game_id,team_id,player_id,stat_id)
+    add_game_log(game_id,stat)
   end
+  
+   def self.add_game_log(game_id,stat)
+      gk = game_log_key(game_id)
+      game_log = Rails.cache.fetch(gk){Array.new}
+      game_log.push(stat)
+      Rails.cache.write(gk,game_log)
+    end
 
-  def self.add_game_log(game_id,text)
-    gk = game_log_key(game_id)
-    game_log = Rails.cache.fetch(gk){Array.new}
-    game_log.push(text)
-    Rails.cache.write(gk,game_log)
-  end
   
   def self.game_log(game_id)
     gk = game_log_key(game_id)
     Rails.cache.read(gk)
   end
   
-  def self.create_log(user_id,game_id,team_id,player_id,stat_id)
-    str = "#" << user_id.to_s << "." << game_id.to_s << "." << team_id.to_s << "." <<  player_id.to_s << "." <<  stat_id.to_s
+  def self.clear_cache(game_id)
+    Rails.cache.delete(game_stats_map_key(game_id))
+    Rails.cache.delete(game_log_key(game_id))
   end
   
+ 
   def self.update_stat(user_id,game_id,team_id,player_id,stat_id)
     Logger.new(STDOUT).info("logger update_stat  #{stat_id}.")
     gk = game_stats_map_key(game_id)
@@ -56,6 +70,12 @@ class StatisticsCollector
   end
   
   def self.calculate_stats(game_id)
+    logger =  Logger.new(STDOUT)
+    CalculatedGamePlayerStatistic.delete_all(["game_id=?",game_id])
+    CalculatedGameStatistic.delete_all(["game_id=?",game_id])
+    
+    
+    logger.info("calculating stats for #{game_id}")
       gk = game_stats_map_key(game_id)
       game_map = Rails.cache.read(gk)
       return unless game_map
@@ -65,40 +85,61 @@ class StatisticsCollector
       
       #iterate through keys, which essential iterates over player/statistic type pairs
       game_map.keys.each do |key|
+      logger.info("got key #{key}")
+        
       counts = Array.new
       # for each player get all the counts that have been reported
       collected_stats_map = game_map[key]
         collected_stats_map.values.each do |x| 
         counts << x.count
       end
+      logger.info("counts are #{counts}")
+      
       # choose the most popular count reported
       calculated_count = mode(counts)  
+          logger.info("calculated_count : #{calculated_count}")
       stat = CalculatedGamePlayerStatistic.find_or_create_by_statistic_type_id_and_game_id_and_player_id_and_team_id(
         statistic_type_id(key),game_id(key),player_id(key),team_id(key))
       stat.count = calculated_count
       stat.save!
       
+      logger.info("saved #{stat.inspect}")
+      
       # add that count to the total for this team and stat type
+      logger.info("team map #{teams_map[team_id(key)].inspect}")
       team_map = teams_map[team_id(key)] 
       team_map = Hash.new unless team_map
       team_record_key = team_id(key).to_s << "." <<  statistic_type_id(key).to_s 
       entry = team_map[team_record_key]
       entry = 0 unless entry
       entry = entry + calculated_count
+      logger.info("team entry #{entry.inspect}")
+      
       team_map[team_record_key]=entry
       teams_map[team_id(key)]=team_map
+      logger.info("team map #{teams_map[team_id(key)].inspect}")
+      
     end
+    logger.info("about to save all team entries")
     
     # create/update all the team records 
     teams_map.keys.each do |team_id|
+       logger.info("team id #{team_id}")
+      
       team_map=teams_map[team_id]
+          logger.info("team map #{team_map}")
+      
         team_map.keys.each do |key|
+          logger.info("key #{key}")
           team_id = key.split(".")[0]
-          statistic_type_id =  key.split(".")[0]
+          statistic_type_id =  key.split(".")[1]
+          logger.info("team #{team_id} stat #{statistic_type_id} team #{team_id}")
           stat = CalculatedGameStatistic.find_or_create_by_statistic_type_id_and_game_id_and_team_id(
               statistic_type_id,game_id,team_id)
           stat.count = team_map[key]
           stat.save!
+                
+          logger.info("saved team entry #{stat.inspect}")
                 
         end
     end  

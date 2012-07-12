@@ -18,4 +18,12 @@ class UserReportedStatisticSlim
     end
   end
   
+  def set_attrs(user_id,game_id,team_id,player_id,stat_id)
+    @user_id=user_id
+    @game_id=game_id
+    @team_id=team_id
+    @player_id=player_id
+    @statistic_type_id=stat_id
+  end
+  
 end

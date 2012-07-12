@@ -14,24 +14,24 @@
  
   <div class="field">
     <%= f.label :statistic_type %><br /> [<% @statistic_types.each do |x| %>  <%= x.id %> (<%=x.code %>), <%end%>]<br />
-       <%= f.text_field :statistic_type, :value=>@statistic_types.sample.id %>
+       <%= f.text_field :statistic_type, :value=>@statistic_types.first.id %>
    
   </div>
   <div class="field">
     <%= f.label :game %><br /> [<% @games.each do |x| %>  <%= x.id %> (<%=x.name %>), <%end%>]<br />
-    <%= f.text_field :game, :value=>@games.sample.id %>
+    <%= f.text_field :game, :value=>@games.first.id %>
   </div>
   <div class="field">
     <%= f.label :team %><br />[<% @teams.each do |x| %>  <%= x.id %> (<%=x.name %>) , <%end%>]<br />
-    <%= f.text_field :team, :value=>@teams.sample.id %>
+    <%= f.text_field :team, :value=>@teams.first.id %>
   </div>
   <div class="field">
     <%= f.label :player %><br />[<% @players.each do |x| %>  <%= x.id %> (<%=x.name %>), <%end%>]<br />
-    <%= f.text_field :player, :value=>@players.sample.id %>
+    <%= f.text_field :player, :value=>@players.first.id %>
   </div>
   <div class="field">
     <%= f.label :user %><br />[<% @users.each do |x| %>  <%= x.id %> (<%=x.twitter_screen_name %>), <%end%>]<br />
-    <%= f.text_field :user , :value=>@users.sample.id %>
+    <%= f.text_field :user , :value=>@users.first.id %>
   </div>
   <div class="actions">
     <%= f.submit %>
