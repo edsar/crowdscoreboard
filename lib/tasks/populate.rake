@@ -41,10 +41,10 @@ namespace :db do
     
     index=0
     storm_player_names.each do |name|
-      player = Player.create!(:name=>name)
+      player = Player.create!(:name=>name, :team=>@storm)
     end
     sparks_player_names.each do |name|
-        player = Player.create!(:name=>name)
+        player = Player.create!(:name=>name, :team=>@sparks)
     end
       
     
