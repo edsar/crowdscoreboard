@@ -27,18 +27,14 @@ namespace :db do
     User.create!(:twitter_screen_name=>'StormFan')
     User.create!(:twitter_screen_name=>'SportsFan')
     User.create!(:twitter_screen_name=>'SueBirdFan')
-   
-    
-    @game = Game.create!(:name=>'Seattle Storm vs. LA Sparks')
-    @storm = Team.create!(:name =>"Seattle Storm")
-    @sparks = Team.create!(:name => "LA Sparks")
-    
+
     @st_fgm = StatisticType.find_by_code("FGM")
     @st_3pm = StatisticType.find_by_code("3PM")
     @statistic_types = StatisticType.all
-   
-    
-    
+
+    @storm = Team.create!(:name =>"Seattle Storm")
+    @sparks = Team.create!(:name => "LA Sparks")
+
     index=0
     storm_player_names.each do |name|
       player = Player.create!(:name=>name, :team=>@storm)
@@ -46,7 +42,12 @@ namespace :db do
     sparks_player_names.each do |name|
         player = Player.create!(:name=>name, :team=>@sparks)
     end
-      
-    
+
+    @game = Game.create!(:name=>'Seattle Storm vs. LA Sparks', :home_team=>@storm, :visiting_team=>@sparks)
+    @entries = GameRoster.generate_entries(@game)
+
+    @entries.each do |x|
+      x.save!
+    end
   end
 end

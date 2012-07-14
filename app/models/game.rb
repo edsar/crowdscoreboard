@@ -1,8 +1,12 @@
 class Game < ActiveRecord::Base
-  attr_accessible :name
+  attr_accessible :name, :home_team, :visiting_team
   has_many :calculated_game_statistics
   has_many :calculated_game_player_statistics
-  
+
+  belongs_to :home_team, :class_name => "Team", :foreign_key => "home_team_id"
+  belongs_to :visiting_team, :class_name => "Team", :foreign_key => "visiting_team_id"
+
+
   def team_ids
     team_ids = Set.new
     self.calculated_game_statistics.each do |x|
