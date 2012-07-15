@@ -14,7 +14,7 @@
 
 <% @stats_log_entries.each do |user_reported_statistic| %>
   <tr>
-    <td><%= user_reported_statistic.statistic_type_id %></td>
+    <td><%= @stat_type_map[user_reported_statistic.statistic_type_id] %></td>
     <td><%= user_reported_statistic.game_id %></td>
     <td><%= user_reported_statistic.team_id %></td>
     <td><%= user_reported_statistic.player_id %></td>

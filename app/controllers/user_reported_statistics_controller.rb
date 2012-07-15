@@ -7,7 +7,11 @@ class UserReportedStatisticsController < ApplicationController
   # GET /user_reported_statistics
   # GET /user_reported_statistics.json
   def index
-    #@user_reported_statistics = UserReportedStatistic.all
+     statistic_types = StatisticType.all
+     @stat_type_map=Hash.new
+     statistic_types.each do |x|
+       @stat_type_map[x.id]=x.code
+     end
      @stats_log_entries = Rails.cache.fetch("user_stats_log"){Array.new}
     respond_to do |format|
       format.html # index.html.erb
@@ -52,11 +56,29 @@ class UserReportedStatisticsController < ApplicationController
   def create
     @user_reported_statistic = UserReportedStatistic.new()
      stat_params=params[:user_reported_statistic]
-     @user_reported_statistic.statistic_type=StatisticType.find(stat_params[:statistic_type])
-     @user_reported_statistic.game=Game.find(stat_params[:game])
-     @user_reported_statistic.team=Team.find(stat_params[:team])
-     @user_reported_statistic.player=Player.find(stat_params[:player])
-     @user_reported_statistic.user=User.find(stat_params[:user])
+
+
+    @tweet = params[:tweet]
+     values = @tweet.scan(/\#g(\d+)p(\d+)s(\w+)/).first
+
+    @user_reported_statistic.errors.add("Unable to parse tweet #{@tweet}") unless values.count ==3
+
+     game_id=values[0]
+     player_id=values[1]
+     stat_code=values[2]
+
+    @user_reported_statistic.user=User.find(stat_params[:user])
+
+    statistic_type = StatisticType.first( :conditions => [ "lower(code) = ?", stat_code.downcase ])
+    game = Game.find(game_id)
+    player = Player.find(player_id)
+    @user_reported_statistic.statistic_type=statistic_type
+    @user_reported_statistic.game=game
+    @user_reported_statistic.player=player
+
+    game_roster = GameRoster.find_by_game_id_and_player_id(@user_reported_statistic.game.id,@user_reported_statistic.player.id)
+     @user_reported_statistic.team=game_roster.team
+
      logger.info("logger create #{@user_reported_statistic}")
      StatisticsCollector.update_stat(stat_params[:user],stat_params[:game],stat_params[:team],stat_params[:player],stat_params[:statistic_type])
      logger.info("logger update_stat")

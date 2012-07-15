@@ -11,29 +11,40 @@
     </div>
   <% end %>
 
+
+    <div class="field">
+      <%= f.label :user %><br />[<% @users.each do |x| %>  <%= x.id %> (<%=x.twitter_screen_name %>), <%end%>]<br />
+      <%= f.text_field :user , :value=>@users.first.id %>
+    </div>
+
+    <div class="field">
+      <% example = "@c2sb \#g#{@games.first.id}p#{@players.first.id}s#{@statistic_types.first.code}" %>
+      <% label = "Tweet : @c2sb #g<game_id>p<player_id>s<stat_code>" %>
+      <%=label_tag label %> <br/>
+      <%=text_field_tag 'tweet' , value=example %>
+    </div>
+
+    <div class="actions">
+      <%= f.submit %>
+    </div>
+    <hr>
+
+
+
  
   <div class="field">
     <%= f.label :statistic_type %><br /> [<% @statistic_types.each do |x| %>  <%= x.id %> (<%=x.code %>), <%end%>]<br />
-       <%= f.text_field :statistic_type, :value=>@statistic_types.first.id %>
-   
+
   </div>
   <div class="field">
     <%= f.label :game %><br /> [<% @games.each do |x| %>  <%= x.id %> (<%=x.name %>), <%end%>]<br />
-    <%= f.text_field :game, :value=>@games.first.id %>
   </div>
   <div class="field">
-    <%= f.label :team %><br />[<% @teams.each do |x| %>  <%= x.id %> (<%=x.name %>) , <%end%>]<br />
-    <%= f.text_field :team, :value=>@teams.first.id %>
-  </div>
-  <div class="field">
-    <%= f.label :player %><br />[<% @players.each do |x| %>  <%= x.id %> (<%=x.name %>), <%end%>]<br />
-    <%= f.text_field :player, :value=>@players.first.id %>
+    <%= f.label :player %><br />[<% @players.each do |x| %>  <%= x.id %> (<%=x.name %> - <%=x.team.name %>), <%end%>]<br />
   </div>
   <div class="field">
     <%= f.label :user %><br />[<% @users.each do |x| %>  <%= x.id %> (<%=x.twitter_screen_name %>), <%end%>]<br />
-    <%= f.text_field :user , :value=>@users.first.id %>
   </div>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
+
+
 <% end %>
