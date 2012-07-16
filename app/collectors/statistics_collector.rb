@@ -78,6 +78,7 @@ class StatisticsCollector
     logger.info("calculating stats for #{game_id}")
       gk = game_stats_map_key(game_id)
       game_map = Rails.cache.read(gk)
+    logger.info("game map : #{game_map}")
       return unless game_map
       
       # we're going to sum it up by team while we're at it

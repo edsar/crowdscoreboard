@@ -80,7 +80,8 @@ class UserReportedStatisticsController < ApplicationController
      @user_reported_statistic.team=game_roster.team
 
      logger.info("logger create #{@user_reported_statistic}")
-     StatisticsCollector.update_stat(stat_params[:user],stat_params[:game],stat_params[:team],stat_params[:player],stat_params[:statistic_type])
+    urs =    @user_reported_statistic
+     StatisticsCollector.update_stat(urs.user.id,urs.game.id,urs.team.id,urs.player.id,urs.statistic_type.id)
      logger.info("logger update_stat")
      log = Rails.cache.fetch("user_stats_log"){Array.new}
      log.push(UserReportedStatisticSlim.new(@user_reported_statistic))
