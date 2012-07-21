@@ -42,7 +42,7 @@ class StatisticsCollector
     logger =  Logger.new(STDOUT)
     errors = Array.new
     values = tweet.scan(/\#g(\d+)p(\d+)s(\w+)/).first
-    if (values.count!=3)
+    if (!values || values.count!=3)
       errors.push("Unable to parse tweet #{tweet}, unrecognized format")
       return errors
     end
