@@ -13,6 +13,7 @@ class UserReportedStatisticsController < ApplicationController
        @stat_type_map[x.id]=x.code
      end
      @stats_log_entries = Rails.cache.fetch("user_stats_log"){Array.new}
+     @tweet_log = StatisticsCollector.get_tweet_log
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @user_reported_statistics }
@@ -56,46 +57,38 @@ class UserReportedStatisticsController < ApplicationController
   def create
     @user_reported_statistic = UserReportedStatistic.new()
      stat_params=params[:user_reported_statistic]
+     @tweet = params[:tweet]
+     user_id = stat_params[:user]
+     errors = StatisticsCollector.add_tweet(user_id,@tweet)
+    has_error = false
+     if(errors && errors.count()>0)
+       has_error=true
+       @user_reported_statistic = UserReportedStatistic.new
+       @statistic_types = StatisticType.all
+       @games = Game.all
+       @teams = Team.all
+       @players = Player.all
+       @users = User.all
+      errors.each do | x|
+        @user_reported_statistic.errors.add(:tweet,x)
+      end
+    end
+    logger.info("logger update_stat")
+    #log = Rails.cache.fetch("user_stats_log"){Array.new}
+    #usr = UserReportedStatisticSlim.new
+    #usr.set_attrs(user_id,game_id,team_id,player_id,stat_id)
+    #log.push(UserReportedStatisticSlim.new(@user_reported_statistic))
+    #Rails.cache.write("user_stats_log",log)
 
-
-    @tweet = params[:tweet]
-     values = @tweet.scan(/\#g(\d+)p(\d+)s(\w+)/).first
-
-    @user_reported_statistic.errors.add("Unable to parse tweet #{@tweet}") unless values.count ==3
-
-     game_id=values[0]
-     player_id=values[1]
-     stat_code=values[2]
-
-    @user_reported_statistic.user=User.find(stat_params[:user])
-
-    statistic_type = StatisticType.first( :conditions => [ "lower(code) = ?", stat_code.downcase ])
-    game = Game.find(game_id)
-    player = Player.find(player_id)
-    @user_reported_statistic.statistic_type=statistic_type
-    @user_reported_statistic.game=game
-    @user_reported_statistic.player=player
-
-    game_roster = GameRoster.find_by_game_id_and_player_id(@user_reported_statistic.game.id,@user_reported_statistic.player.id)
-     @user_reported_statistic.team=game_roster.team
-
-     logger.info("logger create #{@user_reported_statistic}")
-    urs =    @user_reported_statistic
-     StatisticsCollector.update_stat(urs.user.id,urs.game.id,urs.team.id,urs.player.id,urs.statistic_type.id)
-     logger.info("logger update_stat")
-     log = Rails.cache.fetch("user_stats_log"){Array.new}
-     log.push(UserReportedStatisticSlim.new(@user_reported_statistic))
-     Rails.cache.write("user_stats_log",log)
-     
     respond_to do |format|
-      if @user_reported_statistic.save
+      if !has_error
                   format.html { redirect_to user_reported_statistics_url, notice: 'User reported statistic was successfully created.' }
                   format.json { render json: @user_reported_statistic, status: :created, location: @user_reported_statistic }
                 else
                   format.html { render action: "new" }
                   format.json { render json: @user_reported_statistic.errors, status: :unprocessable_entity }
                 end
-     
+
     end
   end
 

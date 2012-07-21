@@ -25,5 +25,8 @@ class UserReportedStatisticSlim
     @player_id=player_id
     @statistic_type_id=stat_id
   end
-  
+
+
+
+
 end

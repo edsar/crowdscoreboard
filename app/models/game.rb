@@ -1,4 +1,4 @@
-class Game < ActiveRecord::Base
+ class Game < ActiveRecord::Base
   attr_accessible :name, :home_team, :visiting_team
   has_many :calculated_game_statistics
   has_many :calculated_game_player_statistics

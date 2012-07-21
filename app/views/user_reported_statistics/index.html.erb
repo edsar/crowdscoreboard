@@ -1,28 +1,13 @@
-<h1>Listing user_reported_statistics</h1>
-
-<table>
-  <tr>
-    <th>Statistic type</th>
-    <th>Game</th>
-    <th>Team</th>
-    <th>Player</th>
-    <th>User</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-
-<% @stats_log_entries.each do |user_reported_statistic| %>
-  <tr>
-    <td><%= @stat_type_map[user_reported_statistic.statistic_type_id] %></td>
-    <td><%= user_reported_statistic.game_id %></td>
-    <td><%= user_reported_statistic.team_id %></td>
-    <td><%= user_reported_statistic.player_id %></td>
-    <td><%= user_reported_statistic.user_id %></td>
-   
-  </tr>
+<h1>Tweets</h1>
+                <ul>
+        <% if(@tweet_log && @tweet_log.count()>0) %>
+<% @tweet_log.each do |x| %>
+<li>   <%= x %>  </li>
 <% end %>
-
+                      </ul>
+    <% else %>
+           No Tweets
+    <% end %>
 </table>
 
 <br />

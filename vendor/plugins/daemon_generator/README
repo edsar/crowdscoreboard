@@ -1,5 +1,3 @@
-database.yml is excluded - you can copy database.example.yml
-
 Daemon Generator
 ================
 
@@ -14,6 +12,3 @@ Individual control script:
 
 App-wide control script (I add this to my capistrano recipe's after_restart task):
 > ./script/daemons [start|stop|restart]
-
-
-e.g. ./lib/daemons/statposter_ctl start
