@@ -19,13 +19,16 @@ while($running) do
 
   begin
   player = Player.all.sample
+  game = Game.all.sample
   tr = TweetRecord.new
   tr.user_screen_name="rebeccag_dev"
   tr.user_twitter_id=1234567890123
-  tr.status_text="@c2sb #g17p{player.id}sFGM"
+  tr.status_text="@c2sb #g#{game.id}p#{player.id}sFGM"
+  Rails.logger.info "Sending tweet #{tr.inspect}"
   TweetCollector.add_tweet(tr)
   #StatisticsCollector.add_tweet(68,"#g17p#{player.id}sFGM")
   Rails.logger.info "Submitted tweet for player #{player.id} - #{player.name}"
+  Rails.logger.info("Tweet log #{StatisticsCollector.get_tweet_log.first.inspect}")
   #@c2sb #g17p226sFGM
   rescue => ex
     Rails.logger.info "Exception #{ex.backtrace}"
@@ -33,5 +36,5 @@ while($running) do
   #StatisticsCollector.add_tweet(68,"#g17p#{player.id}sFGM")
   #Rails.logger.info "Submitted tweet for player #{player.id} - #{player.name}"
 
-  sleep 3
+  sleep 15
 end

@@ -55,30 +55,38 @@ class UserReportedStatisticsController < ApplicationController
   # POST /user_reported_statistics
   # POST /user_reported_statistics.json
   def create
-    @user_reported_statistic = UserReportedStatistic.new()
-     stat_params=params[:user_reported_statistic]
-     @tweet = params[:tweet]
-     user_id = stat_params[:user]
-     errors = StatisticsCollector.add_tweet(user_id,@tweet)
+
+    player = Player.all.sample
+    game = Game.all.sample
+    tr = TweetRecord.new
+    tr.user_screen_name="rebeccag_dev"
+    tr.user_twitter_id=1234567890123
+    tr.status_text="@c2sb #g#{game.id}p#{player.id}sFGM"
+    Rails.logger.info "Sending tweet #{tr.inspect}"
+    TweetCollector.add_tweet(tr)
+    #StatisticsCollector.add_tweet(68,"#g17p#{player.id}sFGM")
+    Rails.logger.info "Submitted tweet for player #{player.id} - #{player.name}"
+    Rails.logger.info("Tweet log #{StatisticsCollector.get_tweet_log.last.inspect}")
     has_error = false
-     if(errors && errors.count()>0)
-       has_error=true
-       @user_reported_statistic = UserReportedStatistic.new
-       @statistic_types = StatisticType.all
-       @games = Game.all
-       @teams = Team.all
-       @players = Player.all
-       @users = User.all
-      errors.each do | x|
-        @user_reported_statistic.errors.add(:tweet,x)
-      end
-    end
-    logger.info("logger update_stat")
-    #log = Rails.cache.fetch("user_stats_log"){Array.new}
-    #usr = UserReportedStatisticSlim.new
-    #usr.set_attrs(user_id,game_id,team_id,player_id,stat_id)
-    #log.push(UserReportedStatisticSlim.new(@user_reported_statistic))
-    #Rails.cache.write("user_stats_log",log)
+    #@user_reported_statistic = UserReportedStatistic.new()
+    # stat_params=params[:user_reported_statistic]
+    # @tweet = params[:tweet]
+    # user_id = stat_params[:user]
+    # errors = StatisticsCollector.add_tweet(user_id,@tweet)
+    #has_error = false
+    # if(errors && errors.count()>0)
+    #   has_error=true
+    #   @user_reported_statistic = UserReportedStatistic.new
+    #   @statistic_types = StatisticType.all
+    #   @games = Game.all
+    #   @teams = Team.all
+    #   @players = Player.all
+    #   @users = User.all
+    #  errors.each do | x|
+    #    @user_reported_statistic.errors.add(:tweet,x)
+    #  end
+    #end
+    #logger.info("logger update_stat")
 
     respond_to do |format|
       if !has_error

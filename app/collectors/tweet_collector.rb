@@ -6,7 +6,7 @@ class TweetCollector
     screen_name = tweet_record.user_screen_name
     user = find_or_create_user(screen_name,tweet_record.user_twitter_id)
     tweet_record.user_id = user.id
-    StatisticsCollector.add_tweet(tweet_record.user_id,tweet_record.status_text)
+    StatisticsCollector.add_tweet(tweet_record)
   end
 
   def self.find_or_create_user(screen_name,twitter_id)

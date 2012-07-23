@@ -4,8 +4,7 @@ class StatisticsCollector
   require 'user_reported_statistic_slim'
 
   @@mutex = Mutex.new
-  @@mutex_tweets = Mutex.new
-  
+
   ## read only methods
   def self.game_log(game_id)
     gk = game_log_key(game_id)
@@ -23,54 +22,56 @@ class StatisticsCollector
   end
 
   def self.add_tweet_log(tweet)
-    @@mutex_tweets.lock
       tweet_list = Rails.cache.fetch("tweet_log"){Array.new}
       tweet_list.push(tweet)
+      Rails.logger.info "Pushing tweet record #{tweet}"
       Rails.cache.write("tweet_log",tweet_list)
-   @@mutex_tweets.unlock
   end
 
   def self.get_tweet_log
-    @@mutex_tweets.lock
-    log = Rails.cache.fetch("tweet_log"){Array.new}
-    @@mutex_tweets.unlock
-    return log
+    Rails.cache.fetch("tweet_log"){Array.new}
   end
 
-  def self.add_tweet(user_id,tweet)
-    add_tweet_log(tweet)
-    logger =  Logger.new(STDOUT)
-    errors = Array.new
-    values = tweet.scan(/\#g(\d+)p(\d+)s(\w+)/).first
+  def self.add_tweet(tweet_record)
+    logger =  Rails.logger
+    logger.info("Tweet record #{tweet_record.inspect}")
+    values = tweet_record.status_text.scan(/\#g(\d+)p(\d+)s(\w+)/).first
+    logger.info("Tweet record #{tweet_record.status_text}")
     if (!values || values.count!=3)
-      errors.push("Unable to parse tweet #{tweet}, unrecognized format")
-      return errors
+       tweet_record.add_error!("Unable to parse tweet, unrecognized format #{tweet_record.status_text}")
     end
 
-    game_id=values[0]
-    player_id=values[1]
-    stat_code=values[2]
+    if(!tweet_record.has_error?)
+      game_id=values[0]
+      player_id=values[1]
+      stat_code=values[2]
 
-    statistic_type = StatisticType.first( :conditions => [ "lower(code) = ?", stat_code.downcase ])
-    errors.push("Unrecognized statistic type #{stat_code}") unless statistic_type
-    game = Game.find(game_id)
-    errors.push("Unknown game id #{game_id}") unless game
-    player = Player.find(player_id)
-    errors.push("Unknown player #{player_id}") unless player
+      statistic_type = StatisticType.first( :conditions => [ "lower(code) = ?", stat_code.downcase ])
+      errors.push("Unrecognized statistic type #{stat_code}") unless statistic_type
+      game = Game.find(game_id)
+      tweet_record.add_error("Unknown game id #{game_id}") unless game
+      player = Player.find(player_id)
+      tweet_record.add_error("Unknown player #{player_id}") unless player
 
-    if(errors.count()>0)
-      return errors
+    end
+    if(!tweet_record.has_error?)
+     game_roster = GameRoster.where("game_id=? and player_id=? ",game_id,player_id).first
+
+      tweet_record.add_error("Unable to find player #{player_id} on team roster for game #{game_id} ")  unless game_roster
     end
 
-    game_roster = GameRoster.where("game_id=? and player_id=? ",game_id,player_id).first
-
-    errors.push("Unable to find player #{player_id} on team roster for game #{game_id} ")  unless game_roster
-    if(errors.count()>0)
-      return errors
+    if(tweet_record.has_error?)
+      tweet_record.processed_successfully=false
+      tweet_record.processed_at=Date.new
+      logger.info("failed to parse tweet #{tweet_record.inspect}")
+    else
+      logger.info("Successfully parsed tweet, adding stat ")
+      tweet_record.processed_successfully=true
+      tweet_record.processed_at=Date.new
+      add_stat(tweet_record.user_id,game_roster.game.id,game_roster.team.id,game_roster.player.id,statistic_type.id)
     end
-    logger.info("Successfully parsed tweet, adding stat ")
-    add_stat(user_id,game_roster.game.id,game_roster.team.id,game_roster.player.id,statistic_type.id)
-    return errors
+    logger.info("Will add tweet log #{tweet_record.inspect}")
+    add_tweet_log(tweet_record)
     #respond_to do |format|
     #  if @user_reported_statistic.save
     #    format.html { redirect_to user_reported_statistics_url, notice: 'User reported statistic was successfully created.' }
