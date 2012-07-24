@@ -27,6 +27,10 @@ class UserReportedStatisticSlim
   end
 
 
+  def to_s
+    return "user #{@user_id}, game #{@game_id}, player, #{@player_id}, team #{@team_id}, stat #{@statistic_type_id}"
+  end
+
 
 
 end

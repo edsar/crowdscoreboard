@@ -28,4 +28,8 @@ class TweetRecord
     @error_msgs = Array.new unless @error_msgs
     !@error_msgs.empty?
   end
+
+  def to_s
+    str = "user #{@user_id} tweets : #{@status_text}"
+  end
 end

@@ -2,6 +2,7 @@ class StatisticsCollector
   
   require 'cumulative_user_player_statistic'
   require 'user_reported_statistic_slim'
+  require 'tweet_record'
 
   @@mutex = Mutex.new
 
