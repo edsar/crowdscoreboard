@@ -49,15 +49,15 @@ class StatisticsCollector
       statistic_type = StatisticType.first( :conditions => [ "lower(code) = ?", stat_code.downcase ])
       errors.push("Unrecognized statistic type #{stat_code}") unless statistic_type
       game = Game.find(game_id)
-      tweet_record.add_error("Unknown game id #{game_id}") unless game
+      tweet_record.add_error!("Unknown game id #{game_id}") unless game
       player = Player.find(player_id)
-      tweet_record.add_error("Unknown player #{player_id}") unless player
+      tweet_record.add_error!("Unknown player #{player_id}") unless player
 
     end
     if(!tweet_record.has_error?)
      game_roster = GameRoster.where("game_id=? and player_id=? ",game_id,player_id).first
 
-      tweet_record.add_error("Unable to find player #{player_id} on team roster for game #{game_id} ")  unless game_roster
+      tweet_record.add_error!("Unable to find player #{player_id} on team roster for game #{game_id} ")  unless game_roster
     end
 
     if(tweet_record.has_error?)
