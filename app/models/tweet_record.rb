@@ -30,6 +30,11 @@ class TweetRecord
   end
 
   def to_s
-    str = "user #{@user_id} tweets : #{@status_text}"
+    if processed_successfully
+      "SUCCESS!  #{user_screen_name} : #{status_text}"
+    else
+      "FAILED TO PROCESS : #{user_screen_name} : #{status_text}, #{error_msgs.inspect}"
+    end
+
   end
 end

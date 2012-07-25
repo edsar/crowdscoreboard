@@ -1,7 +1,7 @@
 <h1>Tweets</h1>
                 <ul>
         <% if(@tweet_log && @tweet_log.count()>0) %>
-<% @tweet_log.each do |x| %>
+<% @tweet_log.last(20).reverse.each do |x| %>
 <li>   <%= x %>  </li>
 <% end %>
                       </ul>

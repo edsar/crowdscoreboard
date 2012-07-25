@@ -15,10 +15,9 @@ class UserReportedStatisticsController < ApplicationController
        @stat_type_map[x.id]=x.code
      end
      @stats_log_entries = Rails.cache.fetch("user_stats_log"){Array.new}
-     @tweet_log = StatisticsCollector.get_tweet_log
+     @tweet_log = TweetCollector.get_tweet_log
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: @user_reported_statistics }
     end
   end
 
@@ -79,31 +78,29 @@ class UserReportedStatisticsController < ApplicationController
     tr = TweetRecord.new
     tr.status_text=@tweet
     tr.user_id=   user_id
-    StatisticsCollector.add_tweet(tr)
-    has_error = false
-    errors = tr.error_msgs
-    if(errors && errors.count()>0)
-       has_error=true
-       @user_reported_statistic = UserReportedStatistic.new
+    TweetCollector.add_tweet(tr)
+    @user_reported_statistic = UserReportedStatistic.new
+
+    if tr.has_error?
        @statistic_types = StatisticType.all
        @games = Game.all
        @teams = Team.all
        @players = Player.all
        @users = User.all
-      errors.each do | x|
+       tr.error_msgs.each do | x|
         @user_reported_statistic.errors.add(:tweet,x)
       end
     end
     logger.info("logger update_stat")
 
     respond_to do |format|
-      if !has_error
-                  format.html { redirect_to user_reported_statistics_url, notice: 'User reported statistic was successfully created.' }
-                  format.json { render json: @user_reported_statistic, status: :created, location: @user_reported_statistic }
-                else
-                  format.html { render action: "new" }
-                  format.json { render json: @user_reported_statistic.errors, status: :unprocessable_entity }
-                end
+      if tr.has_error?
+        format.html { render action: "new" }
+        format.json { render json: @user_reported_statistic.errors, status: :unprocessable_entity }
+      else
+        format.html { redirect_to user_reported_statistics_url, notice: 'User reported statistic was successfully created.' }
+        format.json { render json: @user_reported_statistic, status: :created, location: @user_reported_statistic }
+      end
 
     end
   end
