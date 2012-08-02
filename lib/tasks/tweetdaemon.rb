@@ -1,5 +1,15 @@
+#!/usr/bin/env ruby
 require 'rubygems'
 require 'tweetstream'
+
+## You might want to change this
+#ENV["RAILS_ENV"] ||= "development"
+#
+#require File.dirname(__FILE__) + "/../../config/application"
+#Rails.application.require_environment!
+
+require ENV["RAILS_ENV_PATH"]
+
 
 # options = {
 #     :app_name   => "my_app",
@@ -24,7 +34,9 @@ end
 puts "TweetStream Daemon"
 
 TweetStream::Daemon.new('tracker', options={:multiple => false, :monitor =>true }).track('Bieber') do |status|
-  # save data here
+  Rails.logger.info("#{status.full_text}")
+  puts "#{status.full_text}"
+
 end
 
 

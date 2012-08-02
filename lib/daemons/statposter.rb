@@ -28,7 +28,7 @@ while($running) do
   TweetCollector.add_tweet(tr)
   #StatisticsCollector.add_tweet(68,"#g17p#{player.id}sFGM")
   Rails.logger.info "Submitted tweet for player #{player.id} - #{player.name}"
-  Rails.logger.info("Tweet log #{StatisticsCollector.get_tweet_log.first.inspect}")
+  Rails.logger.info("Tweet log #{TweetCollector.get_tweet_log.first.inspect}")
   #@c2sb #g17p226sFGM
   rescue => ex
     Rails.logger.info "Exception #{ex.backtrace}"

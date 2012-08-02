@@ -12,7 +12,7 @@ end
 
 @twitter = Twitter::Client.new
 #obj = @twitter.search("rebecca", :result_type=> "recent", :rpp=>3, :until => "2012-06-26").results
-obj = @twitter.search("Bieber", :result_type=> "recent", :rpp=>3).results
+obj = @twitter.search("@rebecca_cs1", :result_type=> "recent", :rpp=>3).results
 
 obj.each do | status |
   puts "Status : #{status[:id] } | #{status.from_user} | #{status.from_user_id}| #{status.user} | #{status.full_text}"

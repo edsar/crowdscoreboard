@@ -30,11 +30,19 @@ class TweetRecord
   end
 
   def to_s
-    if processed_successfully
-      "SUCCESS!  #{user_screen_name} : #{status_text}"
+
+
+    if processed_at
+      time = processed_at.strftime("%c")
+      if processed_successfully
+        "SUCCESS!  #{user_screen_name} : #{status_text}  #{time}} "
+      else
+        "FAILED TO PROCESS  #{user_screen_name} : #{status_text}, #{@error_msgs.inspect} #{time}"
+      end
     else
-      "FAILED TO PROCESS : #{user_screen_name} : #{status_text}, #{error_msgs.inspect}"
+      "#{user_screen_name} : #{status_text} "
     end
+
 
   end
 end

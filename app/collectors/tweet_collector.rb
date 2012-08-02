@@ -62,12 +62,12 @@ class TweetCollector
 
     if tweet_record.has_error?
       tweet_record.processed_successfully=false
-      tweet_record.processed_at=Date.new
+      tweet_record.processed_at=DateTime.now
       logger.info("failed to parse tweet #{tweet_record.inspect}")
     else
       logger.info("Successfully parsed tweet, adding stat ")
       tweet_record.processed_successfully=true
-      tweet_record.processed_at=Date.new
+      tweet_record.processed_at=DateTime.now
       StatisticsCollector.add_stat(tweet_record.user_id,game_roster.game.id,game_roster.team.id,game_roster.player.id,statistic_type.id)
     end
     logger.info("Will add tweet log #{tweet_record.inspect}")
