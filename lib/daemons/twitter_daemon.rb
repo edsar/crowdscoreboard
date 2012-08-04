@@ -16,13 +16,6 @@ TweetStream.configure do |config|
 end
 
 
-#Twitter.configure do |config|
-#  config.consumer_key = 'FR21cKcnU9tXg88Sw4Cw'
-#  config.consumer_secret = 'teMypnRGyaVI7tqZp2SkD3NFJhodLCzmu7Eu6D0p0'
-#  config.oauth_token = '18312226-8f4cB9oPBLRXbqtMrZcFUMk7icxGg4vvZrGZCJOch'
-#  config.oauth_token_secret = 'SSLvXnVvJeEFLH2uH5E10nBILbUBTXH1mDe3TfEWE'
-#end
-
 @client = nil
 
 $running = true
