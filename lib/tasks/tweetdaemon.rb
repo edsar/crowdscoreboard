@@ -38,23 +38,24 @@ end
 puts("Starting up the Tweet Stream Client")
 
 begin
-
-@client = TweetStream::Daemon.new('crowdscore',{ :multiple => true , :no_pidfiles => true })
+             puts "begin"
+#@client = TweetStream::Daemon.new('crowdscore',{ :multiple => true , :no_pidfiles => true })
 rescue => ex
+  puts "error"
   puts"Exception #{ex.backtrace}"
 end
-@client.userstream do |status|
-  begin
-    puts("#{status.full_text}")
+#@client.userstream do |status|
+#  begin
+#    puts("#{status.full_text}")
+#
+#    #tr = TweetRecord.new
+#    #tr.user_screen_name=status.user.screen_name
+#    #tr.user_twitter_id=status.user[:id]
+#    #tr.status_text=status.text
+#    #Rails.logger.info "Sending tweet #{tr.inspect}"
+#    #TweetCollector.add_tweet(tr)
+#  rescue => ex
+#    puts"Exception #{ex.backtrace}"
+#  end
 
-    #tr = TweetRecord.new
-    #tr.user_screen_name=status.user.screen_name
-    #tr.user_twitter_id=status.user[:id]
-    #tr.status_text=status.text
-    #Rails.logger.info "Sending tweet #{tr.inspect}"
-    #TweetCollector.add_tweet(tr)
-  rescue => ex
-    puts"Exception #{ex.backtrace}"
-  end
-
-end
+#end
