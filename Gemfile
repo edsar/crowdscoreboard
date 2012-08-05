@@ -8,6 +8,7 @@ gem 'rails', '3.2.6'
 gem 'twitter'
 gem 'pg'
 gem 'tweetstream'
+gem 'delayed_job_active_record'
 
 
 # Gems used only for assets and not required
