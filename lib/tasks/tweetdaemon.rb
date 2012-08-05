@@ -37,7 +37,12 @@ end
 
 puts("Starting up the Tweet Stream Client")
 
+begin
+
 @client = TweetStream::Daemon.new('crowdscore',{ :multiple => true , :no_pidfiles => true })
+rescue => ex
+  puts"Exception #{ex.backtrace}"
+end
 @client.userstream do |status|
   begin
     puts("#{status.full_text}")
