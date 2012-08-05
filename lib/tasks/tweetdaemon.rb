@@ -35,21 +35,21 @@ TweetStream.configure do |config|
 end
 
 
-Rails.logger.info("Starting up the Tweet Stream Client")
+puts("Starting up the Tweet Stream Client")
 
 @client = TweetStream::Daemon.new('crowdscore',{ :multiple => true , :no_pidfiles => true })
 @client.userstream do |status|
   begin
-    Rails.logger.info("#{status.full_text}")
+    puts("#{status.full_text}")
 
-    tr = TweetRecord.new
-    tr.user_screen_name=status.user.screen_name
-    tr.user_twitter_id=status.user[:id]
-    tr.status_text=status.text
-    Rails.logger.info "Sending tweet #{tr.inspect}"
-    TweetCollector.add_tweet(tr)
+    #tr = TweetRecord.new
+    #tr.user_screen_name=status.user.screen_name
+    #tr.user_twitter_id=status.user[:id]
+    #tr.status_text=status.text
+    #Rails.logger.info "Sending tweet #{tr.inspect}"
+    #TweetCollector.add_tweet(tr)
   rescue => ex
-    Rails.logger.info "Exception #{ex.backtrace}"
+    puts"Exception #{ex.backtrace}"
   end
 
 end
