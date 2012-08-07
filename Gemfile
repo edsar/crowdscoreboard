@@ -9,6 +9,7 @@ gem 'twitter'
 gem 'pg'
 gem 'tweetstream'
 gem 'delayed_job_active_record'
+gem 'memcache-client'
 
 
 # Gems used only for assets and not required
