@@ -1,5 +1,35 @@
 class TweetCollector
 
+  def self.start_tweetstream
+
+  # config info for rebeccag_cs1
+    TweetStream.configure do |config|
+      config.consumer_key = 'uqNzZcwYY2j95xmlEuSerA'
+      config.consumer_secret = 'tIwagGNPQebYnCPTzFd6Se4kykrFVJCIakR35tiiH8'
+      config.oauth_token = '717389262-4a0vldN72xgwAYEwEgS1lRTRmeF79Ds3ddtJic7X'
+      config.oauth_token_secret =   'sYVEQN3ePwYolqvrD7VxjUxBjOFaMOkCJrLcoHP81dU'
+      config.auth_method = :oauth
+    end
+
+
+      @client = TweetStream::Client.new
+      @client.userstream do |status|
+        begin
+          Rails.logger.info("#{status.full_text}")
+
+          tr = TweetRecord.new
+          tr.user_screen_name=status.user.screen_name
+          tr.user_twitter_id=status.user[:id]
+          tr.status_text=status.text
+          Rails.logger.info "Sending tweet #{tr.inspect}"
+          TweetCollector.add_tweet(tr)
+        rescue => ex
+          Rails.logger.info "Exception #{ex.backtrace}"
+        end
+      end
+
+  end
+
   def self.add_tweet(tweet_record)
     unless tweet_record.user_id
       user = find_or_create_user(tweet_record.user_screen_name,tweet_record.user_twitter_id)
